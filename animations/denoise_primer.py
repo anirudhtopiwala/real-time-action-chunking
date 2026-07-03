@@ -1,4 +1,4 @@
-"""Figure: denoise-primer — a step descends the noise line from 1 to 0."""
+"""Figure: denoise-primer, a step descends the noise line from 1 to 0."""
 
 from manim import *
 

@@ -1,4 +1,4 @@
-"""Figure: handoff — chunk B is generated AHEAD of chunk A and reuses the overlap
+"""Figure: handoff, chunk B is generated AHEAD of chunk A and reuses the overlap
 as its committed prefix. B's steps (5..12) overlap A's committed tail (5..8)."""
 
 from manim import *
@@ -11,7 +11,7 @@ PITCH = CELL + GAP
 class Handoff(Scene):
     def construct(self):
         styled(self)
-        head = title("Chunk B runs ahead of A — and reuses the overlap").scale(0.56).to_edge(UP, buff=0.5)
+        head = title("Chunk B runs ahead of A, and reuses the overlap").scale(0.56).to_edge(UP, buff=0.5)
         self.play(FadeIn(head))
 
         N, OV = 8, 4  # chunk size, overlap (= H - s)

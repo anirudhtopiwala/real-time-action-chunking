@@ -1,4 +1,4 @@
-"""Figure: the-seam — chunk B is generated ahead of A, overlaps A's tail, and
+"""Figure: the-seam, chunk B is generated ahead of A, overlaps A's tail, and
 extends beyond it. Jerk at the handoff, then the smooth fix."""
 
 import numpy as np

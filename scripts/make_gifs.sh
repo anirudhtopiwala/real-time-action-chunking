@@ -23,6 +23,6 @@ for p in "${PAIRS[@]}"; do
       "$ROOT/assets/$handle.gif"
     echo "  wrote assets/$handle.gif"
   else
-    echo "  (skip $handle — render it first)"
+    echo "  (skip $handle, render it first)"
   fi
 done

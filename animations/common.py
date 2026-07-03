@@ -9,7 +9,7 @@ import numpy as np
 from manim import *
 
 # ---------------------------------------------------------------------------
-# Palette — one consistent visual language across every figure.
+# Palette, one consistent visual language across every figure.
 # ---------------------------------------------------------------------------
 C_BG = "#0E1117"        # near-black background (the 3b1b look)
 C_NOISE = "#F2A341"     # amber  = noisy step / pure noise
@@ -95,7 +95,7 @@ def legend(entries, size=22):
 
 
 # ---------------------------------------------------------------------------
-# Handoff-trajectory helper — shows the A→B motion each conditioning method
+# Handoff-trajectory helper, shows the A→B motion each conditioning method
 # produces (the "additional signal" beside the step-cells).
 # ---------------------------------------------------------------------------
 def traj_fA(t):

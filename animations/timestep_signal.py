@@ -1,4 +1,4 @@
-"""Figure: timestep-signal — the flow-matching timestep is a PER-TOKEN input that
+"""Figure: timestep-signal, the flow-matching timestep is a PER-TOKEN input that
 tells the model how noisy each action step is. Set the prefix to clean, leave the
 postfix noisy. (Essence of the paper's Fig. 2.)"""
 

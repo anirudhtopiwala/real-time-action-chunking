@@ -1,4 +1,4 @@
-"""Figure: action-delay — animated version of the paper's Fig. 1.
+"""Figure: action-delay, animated version of the paper's Fig. 1.
 
 Two overlapping chunks on a controller timeline; sweep the inference delay d to
 show the committed prefix (green) grow/shrink while the postfix (amber) is
@@ -82,7 +82,7 @@ class ActionDelay(Scene):
             anims.append(tplusd[1].animate.move_to([xedge(S + d), tick_y1 - 0.2, 0]))
             self.play(*anims, run_time=run)
 
-        cap = Text("while the model computes the next chunk, the robot executes d steps —\n"
+        cap = Text("while the model computes the next chunk, the robot executes d steps,\n"
                    "those d committed actions become the clean prefix",
                    color=C_TEXT, font_size=22, line_spacing=0.8).to_edge(DOWN, buff=0.35)
         self.play(FadeIn(tplusd), FadeIn(ov_br), FadeIn(ov_t), FadeIn(cap))

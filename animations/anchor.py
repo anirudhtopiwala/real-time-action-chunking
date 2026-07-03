@@ -1,4 +1,4 @@
-"""Figure: anchor — pin a single step; trajectory shows continuity at one point only."""
+"""Figure: anchor, pin a single step; trajectory shows continuity at one point only."""
 
 from manim import *
 
@@ -8,7 +8,7 @@ from common import add_method_trajectory, lock_icon, step_cell, step_row, styled
 class Anchor(Scene):
     def construct(self):
         styled(self)
-        head = title("Anchor — pin a single point").scale(0.56).to_edge(UP, buff=0.4)
+        head = title("Anchor: pin a single point").scale(0.56).to_edge(UP, buff=0.4)
         N, anchor = 8, 7
         row = step_row(N, ["noise"] * N).shift(UP * 1.6)
         self.play(FadeIn(head), FadeIn(row))

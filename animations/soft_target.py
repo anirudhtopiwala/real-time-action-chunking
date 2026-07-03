@@ -1,4 +1,4 @@
-"""Figure: soft-target — fade the prefix's influence; trajectory eases away smoothly."""
+"""Figure: soft-target, fade the prefix's influence; trajectory eases away smoothly."""
 
 from manim import *
 
@@ -8,7 +8,7 @@ from common import C_FROZEN, C_TEXT, add_method_trajectory, step_row, styled, ti
 class SoftTarget(Scene):
     def construct(self):
         styled(self)
-        head = title("Soft target — fade, don't clamp").scale(0.56).to_edge(UP, buff=0.4)
+        head = title("Soft target: fade, don't clamp").scale(0.56).to_edge(UP, buff=0.4)
         N, W = 8, 4
         weights = [1.0, 0.5, 0.25, 0.125]
         row = step_row(N, ["noise"] * N).shift(UP * 1.2)
