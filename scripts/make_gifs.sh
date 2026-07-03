@@ -9,9 +9,9 @@ PAIRS=(
   "the_seam:the-seam:TheSeam"
   "handoff:handoff:Handoff"
   "denoise_primer:denoise-primer:DenoisePrimer"
-  "anchor:anchor:Anchor"
-  "target:target:Target"
-  "soft_target:soft-target:SoftTarget"
+  "single_action:single-action:SingleAction"
+  "full_prefix:full-prefix:FullPrefix"
+  "soft_overlap:soft-overlap:SoftOverlap"
   "action_delay:action-delay:ActionDelay"
   "timestep_signal:timestep-signal:TimestepSignal"
 )

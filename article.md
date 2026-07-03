@@ -61,15 +61,15 @@ There's a real design choice in how big a prefix you condition on, a spectrum fr
 
 **A single action.** Condition on just the one next committed action, the minimal form. It tacks the new chunk to a single known point and lets everything else move freely. Cheap continuity, but weak: the plan can swing away right after that one point.
 
-> **`<Figure: anchor>`** : A chunk of steps; exactly one is fixed (pushpin icon), the rest denoise normally. On a trajectory plot, the curve is tacked to one point and free to wiggle elsewhere.
+> **`<Figure: single-action>`** : A chunk of steps; exactly one is fixed (pushpin icon), the rest denoise normally. On a trajectory plot, the curve is tacked to one point and free to wiggle elsewhere.
 
 **A full prefix.** Condition on the *whole* set of committed actions, every step the robot will have executed by the time the chunk lands. Now the new chunk must agree with the old one over a whole stretch, not just a point, which makes for a genuinely smooth handoff. This is what the paper we're discussing does.
 
-> **`<Figure: target>`** : The first several steps fixed as a rigid block handed over from the previous chunk; the tail grows out of the block's end.
+> **`<Figure: full-prefix>`** : The first several steps fixed as a rigid block handed over from the previous chunk; the tail grows out of the block's end.
 
 **A soft-weighted overlap.** Go further: condition not just on the hard prefix but on *all* overlapping actions between the old and new chunk, weighting them with **exponentially decreasing** influence the further out they go. This "soft masking" gives the smoothest blending (the seam fades rather than switching) at the cost of a more involved sampling procedure.
 
-> **`<Figure: soft-target>`** : Prefix steps shown with a decaying influence curve (strong at the seam, fading out into the overlap), blended rather than hard-locked. Contrast caption: hard prefix = fixed block; soft masking = fading, weighted overlap.
+> **`<Figure: soft-overlap>`** : Prefix steps shown with a decaying influence curve (strong at the seam, fading out into the overlap), blended rather than hard-locked. Contrast caption: hard prefix = fixed block; soft masking = fading, weighted overlap.
 
 ---
 

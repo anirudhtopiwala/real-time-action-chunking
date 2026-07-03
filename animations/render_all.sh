@@ -11,9 +11,9 @@ SCENES=(
   "the_seam.py TheSeam"
   "handoff.py Handoff"
   "denoise_primer.py DenoisePrimer"
-  "anchor.py Anchor"
-  "target.py Target"
-  "soft_target.py SoftTarget"
+  "single_action.py SingleAction"
+  "full_prefix.py FullPrefix"
+  "soft_overlap.py SoftOverlap"
   "action_delay.py ActionDelay"
   "timestep_signal.py TimestepSignal"
 )

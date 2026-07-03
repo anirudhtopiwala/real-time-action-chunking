@@ -70,19 +70,19 @@ There's a real design choice in how big a prefix you condition on, a spectrum fr
 **A single action.** Condition on just the one next committed action, the minimal form. It tacks the new chunk to a single known point and lets everything else move freely. Cheap continuity, but weak: the plan can swing away right after that one point.
 
 
-![anchor](assets/anchor.gif)
+![single-action](assets/single-action.gif)
 
 
 **A full prefix.** Condition on the *whole* set of committed actions, every step the robot will have executed by the time the chunk lands. Now the new chunk must agree with the old one over a whole stretch, not just a point, which makes for a genuinely smooth handoff. This is what the paper we're discussing does.
 
 
-![target](assets/target.gif)
+![full-prefix](assets/full-prefix.gif)
 
 
 **A soft-weighted overlap.** Go further: condition not just on the hard prefix but on *all* overlapping actions between the old and new chunk, weighting them with **exponentially decreasing** influence the further out they go. This "soft masking" gives the smoothest blending (the seam fades rather than switching) at the cost of a more involved sampling procedure.
 
 
-![soft-target](assets/soft-target.gif)
+![soft-overlap](assets/soft-overlap.gif)
 
 
 ---

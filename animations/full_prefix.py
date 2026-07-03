@@ -1,14 +1,14 @@
-"""Figure: target, freeze the whole prefix; trajectory shows smooth handoff."""
+"""Figure: full-prefix, freeze every committed step; trajectory shows smooth handoff."""
 
 from manim import *
 
 from common import (C_FROZEN, C_NOISE, add_method_trajectory, lock_icon, step_cell, step_row, styled, title)
 
 
-class Target(Scene):
+class FullPrefix(Scene):
     def construct(self):
         styled(self)
-        head = title("Target: freeze the whole prefix").scale(0.56).to_edge(UP, buff=0.4)
+        head = title("Full prefix: freeze every committed step").scale(0.52).to_edge(UP, buff=0.4)
         N, K = 8, 3
         row = step_row(N, ["noise"] * N).shift(UP * 1.6)
         self.play(FadeIn(head), FadeIn(row))

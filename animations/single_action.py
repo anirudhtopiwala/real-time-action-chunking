@@ -1,14 +1,14 @@
-"""Figure: anchor, pin a single step; trajectory shows continuity at one point only."""
+"""Figure: single-action, condition on one committed step; trajectory shows continuity at one point only."""
 
 from manim import *
 
 from common import add_method_trajectory, lock_icon, step_cell, step_row, styled, title
 
 
-class Anchor(Scene):
+class SingleAction(Scene):
     def construct(self):
         styled(self)
-        head = title("Anchor: pin a single point").scale(0.56).to_edge(UP, buff=0.4)
+        head = title("Single action: condition on one committed step").scale(0.52).to_edge(UP, buff=0.4)
         N, anchor = 8, 7
         row = step_row(N, ["noise"] * N).shift(UP * 1.6)
         self.play(FadeIn(head), FadeIn(row))
