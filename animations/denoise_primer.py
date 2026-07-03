@@ -26,12 +26,16 @@ class DenoisePrimer(Scene):
             color=C_TEXT, font_size=30).next_to(dot, LEFT, buff=0.4))
         self.play(FadeIn(dot), FadeIn(val))
 
-        nudge = Text("model predicts the nudge toward clean", color=C_TEXT, font_size=24).to_edge(DOWN, buff=0.4)
-        self.play(FadeIn(nudge))
+        eq = Text("x  ←  x + v(x, τ) · Δτ", color=C_TEXT, font_size=32, weight=BOLD)
+        ann = Text("v = the velocity the model predicts (the nudge toward clean)",
+                   color=C_MUTED, font_size=22)
+        caption = VGroup(eq, ann).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
+        self.play(FadeIn(caption))
 
         for level in [0.7, 0.4, 0.15, 0.0]:
             arrow = Arrow(dot.get_center(), pos(level), color=C_CLEAN, buff=0.1, stroke_width=4, max_tip_length_to_length_ratio=0.2)
-            self.play(GrowArrow(arrow), run_time=0.4)
-            self.play(dot.animate.move_to(pos(level)), FadeOut(arrow), run_time=0.7)
+            vlab = Text("v", color=C_CLEAN, font_size=26, slant=ITALIC).next_to(arrow, RIGHT, buff=0.12)
+            self.play(GrowArrow(arrow), FadeIn(vlab), run_time=0.4)
+            self.play(dot.animate.move_to(pos(level)), FadeOut(arrow), FadeOut(vlab), run_time=0.7)
         self.play(dot.animate.set_color(C_CLEAN))
         self.wait(1.2)
