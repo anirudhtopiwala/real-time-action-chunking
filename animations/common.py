@@ -116,9 +116,6 @@ def traj_fB(method, t):
     if method == "single-action":
         # free through the overlap; meets A at one committed step (ov1), then diverges
         return a + 0.6 * np.tanh((t - ov1) / 2.0)
-    if method == "soft-overlap":
-        # close at the seam, drifting apart gradually (never exactly equal)
-        return a + 0.10 + 0.34 * (1 - np.exp(-(t - _B0) / 3.0))
     return a
 
 
@@ -149,7 +146,6 @@ def add_method_trajectory(scene, method):
     notes = {
         "single-action": ("B is free through the overlap, meets A at one committed step, then diverges", C_WARN),
         "full-prefix": ("B matches A across the whole overlap, then they part ways", C_FROZEN),
-        "soft-overlap": ("B is clamped near the seam, then drifts close but not equal", C_FROZEN),
     }
     txt, col = notes[method]
     if method == "single-action":
