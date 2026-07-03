@@ -115,6 +115,14 @@ The split: the first two condition on the *actions* (constrain the output), VLAS
 - You can do it **at inference time** (inpainting/guidance, flexible but adds latency every step) or **at training time** (simulate the delay while training, free at deployment, and a drop-in replacement that matches or beats the inference-time version).
 - The unifying idea: **make training look like deployment.** Simulate the real-time delay while you train, and the seam problem largely takes care of itself at runtime.
 
+---
+
+## The bottom line
+
+Of these, training-time action conditioning comes out ahead. During training the model directly simulates the inference-time behavior, so it learns to condition on exactly the prefix pattern it will meet at deployment, and at runtime it adds no extra latency: no per-step guidance, no inpainting. You get the smoothing for free.
+
+If you have tested these and seen differently, please comment.
+
 *Based on "Training-Time Action Conditioning for Efficient Real-Time Chunking" (Black, Ren, Equi, Levine, Physical Intelligence, arXiv:2512.05964), which builds on Real-Time Chunking (RTC).*
 
 *All figures are original animations (built with Manim). Source + code: [github.com/anirudhtopiwala/real-time-action-chunking](https://github.com/anirudhtopiwala/real-time-action-chunking).*
