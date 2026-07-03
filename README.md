@@ -125,6 +125,8 @@ And the payoff is real: in simulation, training-time conditioning **outperforms*
 
 *Based on "Training-Time Action Conditioning for Efficient Real-Time Chunking" (Black, Ren, Equi, Levine — Physical Intelligence, arXiv:2512.05964), which builds on Real-Time Chunking (RTC).*
 
+*All figures are original animations (built with Manim). Source + code: [github.com/anirudhtopiwala/real-time-action-chunking](https://github.com/anirudhtopiwala/real-time-action-chunking).*
+
 ---
 
 ## Reproducing the figures
