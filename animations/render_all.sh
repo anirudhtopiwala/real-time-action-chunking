@@ -13,7 +13,6 @@ SCENES=(
   "denoise_primer.py DenoisePrimer"
   "single_action.py SingleAction"
   "full_prefix.py FullPrefix"
-  "soft_overlap.py SoftOverlap"
   "action_delay.py ActionDelay"
   "timestep_signal.py TimestepSignal"
 )

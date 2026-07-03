@@ -79,12 +79,6 @@ There's a real design choice in how big a prefix you condition on, a spectrum fr
 ![full-prefix](assets/full-prefix.gif)
 
 
-**A soft-weighted overlap.** Go further: condition not just on the hard prefix but on *all* overlapping actions between the old and new chunk, weighting them with **exponentially decreasing** influence the further out they go. This "soft masking" gives the smoothest blending (the seam fades rather than switching) at the cost of a more involved sampling procedure.
-
-
-![soft-overlap](assets/soft-overlap.gif)
-
-
 ---
 
 ## How long is the prefix? It's the inference delay
@@ -105,7 +99,7 @@ And here's the practical bit: you don't hardcode one `d`, because real-world lat
 
 Here's the part the recent paper (*Training-Time Action Conditioning for Efficient Real-Time Chunking*, Physical Intelligence) is really about. You can inject this conditioning in two places.
 
-**At inference time.** Condition the *already-trained* model on the prefix while it samples, using an inpainting-style guidance step (pseudoinverse guidance). This is flexible (it's what makes soft masking possible), but it isn't free: the guidance requires an extra backward computation *every denoising step*, which adds latency to a system whose entire premise is being fast.
+**At inference time.** Condition the *already-trained* model on the prefix while it samples, using an inpainting-style guidance step (pseudoinverse guidance). This is flexible, but it isn't free: the guidance requires an extra backward computation *every denoising step*, which adds latency to a system whose entire premise is being fast.
 
 **At training time.** Instead, **simulate the inference delay while training**: randomly mark a prefix of each chunk as "committed," feed it in as clean conditioning (content = ground truth, timestep = clean), and train the model to denoise the rest around it. The model *learns* to condition on prefixes directly. At deployment there's nothing extra to do: no guidance, no inpainting, no added latency. It's a few lines of code, no changes to the model architecture or the robot runtime.
 
@@ -117,7 +111,7 @@ And the payoff is real: in simulation, training-time conditioning **outperforms*
 
 | Approach | Conditions on | Applied at | How | Extra cost at deploy |
 |---|---|---|---|---|
-| **Inference-time RTC** | committed actions (hard prefix, or a soft-masked overlap) | inference only | inpainting via pseudoinverse guidance during sampling | a backward pass on every denoising step |
+| **Inference-time RTC** | committed actions (the prefix) | inference only | inpainting via pseudoinverse guidance during sampling | a backward pass on every denoising step |
 | **Training-time RTC** | committed actions (the prefix) | training (simulate the delay) | fix the prefix as clean (timestep = clean), denoise the rest | none |
 | **VLASH (state roll-forward)** | the robot's rolled-forward *state*, not the actions | training augmentation, then inference | roll the state forward by the committed actions, feed that future state in, leave the output actions free | none |
 
@@ -129,7 +123,7 @@ The split: the first two condition on the *actions* (constrain the output), VLAS
 
 - Action chunking is fast and stable but stutters at chunk boundaries, and in a real-time system the seam is *unavoidable*, because the robot has already committed to a prefix of the next chunk by the time it's generated.
 - The cure is **action conditioning**: fix that committed prefix (content = the committed actions, flow timestep = clean) and let the policy denoise only the rest.
-- You can condition on **a single action** (light), **a full prefix** (firm, smooth), or **a soft-weighted overlap** (smoothest).
+- You can condition on **a single action** (light) or **a full prefix** (firm and smooth).
 - You can do it **at inference time** (inpainting/guidance, flexible but adds latency every step) or **at training time** (simulate the delay while training, free at deployment, and a drop-in replacement that matches or beats the inference-time version).
 - The unifying idea: **make training look like deployment.** Simulate the real-time delay while you train, and the seam problem largely takes care of itself at runtime.
 
