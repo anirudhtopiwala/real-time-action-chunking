@@ -26,4 +26,4 @@ class SoftOverlap(Scene):
         alpha = lambda w: f"{round((0.12 + 0.4 * w) * 255):02x}"
         self.play(*[row[i][0].animate.set_stroke(C_FROZEN).set_fill(C_FROZEN + alpha(weights[i])) for i in range(W)])
 
-        add_method_trajectory(self, "soft")
+        add_method_trajectory(self, "soft-overlap")

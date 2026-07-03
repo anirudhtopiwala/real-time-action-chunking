@@ -25,4 +25,4 @@ class FullPrefix(Scene):
         self.play(FadeIn(br1), FadeIn(t1), FadeIn(br2), FadeIn(t2))
         self.play(LaggedStart(*[Transform(row[i], step_cell("clean", label=i).move_to(row[i])) for i in range(K, N)], lag_ratio=0.08), run_time=1.4)
 
-        add_method_trajectory(self, "target")
+        add_method_trajectory(self, "full-prefix")

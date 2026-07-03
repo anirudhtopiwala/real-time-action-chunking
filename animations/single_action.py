@@ -19,4 +19,4 @@ class SingleAction(Scene):
         anims = [Transform(row[i], step_cell("clean", label=i).move_to(row[i])) for i in range(N) if i != anchor]
         self.play(LaggedStart(*anims, lag_ratio=0.08), run_time=1.5)
 
-        add_method_trajectory(self, "anchor")
+        add_method_trajectory(self, "single-action")

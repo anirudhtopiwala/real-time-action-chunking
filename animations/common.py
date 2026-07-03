@@ -102,54 +102,57 @@ def traj_fA(t):
     return 1.4 + 0.5 * np.sin(0.5 * t)
 
 
-# P = end of the prefix / overlap window (in the trajectory panel's x units)
-_TRAJ_P = 7.0
+# Chunk A spans [_A0, _A1]. Chunk B is the NEXT chunk, generated ahead: it starts
+# at _B0 (offset from A's start) and overlaps A's tail on [_B0, _A1].
+_A0, _A1, _B0 = 0.0, 8.0, 4.0
 
 
 def traj_fB(method, t):
     a = traj_fA(t)
-    P = _TRAJ_P
-    if method == "target":
-        # identical to A across the whole prefix, then A and B part ways
-        return a if t <= P else a + 0.30 * (t - P)
-    if method == "anchor":
-        # free (≠A) through the prefix; meets A only at the anchor step P, then diverges
-        return a + 0.72 * np.tanh((t - P) / 2.0)
-    if method == "soft":
-        # clamped tight at the seam, then drifts close-but-not-equal
-        return a + 0.42 * (1 - np.exp(-t / 7.0))
+    ov1 = _A1  # end of the overlap = the last committed step / handoff point
+    if method == "full-prefix":
+        # matches A across the whole overlap, then the two part ways
+        return a if t <= ov1 else a + 0.32 * (t - ov1)
+    if method == "single-action":
+        # free through the overlap; meets A at one committed step (ov1), then diverges
+        return a + 0.6 * np.tanh((t - ov1) / 2.0)
+    if method == "soft-overlap":
+        # close at the seam, drifting apart gradually (never exactly equal)
+        return a + 0.10 + 0.34 * (1 - np.exp(-(t - _B0) / 3.0))
     return a
 
 
 def add_method_trajectory(scene, method):
-    """Draw chunk A vs chunk B motion over their overlapping window for `method`."""
+    """Chunk A vs chunk B motion. B is the next chunk: it starts ahead of A (at
+    _B0) and overlaps A's tail; how it relates in the overlap depends on `method`."""
     ax = Axes(
         x_range=[0, 12], y_range=[0, 3], x_length=7.0, y_length=2.0,
         axis_config={"color": C_MUTED, "include_tip": False, "include_numbers": False},
     ).shift(DOWN * 2.05)
-    P = _TRAJ_P
 
-    lo, hi = ax.c2p(0, 0), ax.c2p(P, 3)
+    lo, hi = ax.c2p(_B0, 0), ax.c2p(_A1, 3)
     band = Rectangle(width=hi[0] - lo[0], height=hi[1] - lo[1], stroke_width=0,
                      fill_color=C_MUTED, fill_opacity=0.12).move_to([(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, 0])
-    band_t = Text("prefix (overlap)", color=C_MUTED, font_size=18).move_to(band).align_to(band, UP).shift(DOWN * 0.12)
+    band_t = Text("overlap (committed prefix)", color=C_MUTED, font_size=18).move_to(band).align_to(band, UP).shift(DOWN * 0.12)
 
-    cA = ax.plot(lambda t: traj_fA(t), x_range=[0, 12], color=C_A, stroke_width=4)
-    cB = ax.plot(lambda t: traj_fB(method, t), x_range=[0, 12], color=C_B, stroke_width=4)
-    aL = Text("chunk A", color=C_A, font_size=20).next_to(ax.c2p(2.2, traj_fA(2.2)), UP, buff=0.12)
+    cA = ax.plot(lambda t: traj_fA(t), x_range=[_A0, _A1], color=C_A, stroke_width=4)
+    cA_ghost = ax.plot(lambda t: traj_fA(t), x_range=[_A1, 12], color=C_A, stroke_width=3).set_opacity(0.3)
+    cB = ax.plot(lambda t: traj_fB(method, t), x_range=[_B0, 12], color=C_B, stroke_width=4)
+    aL = Text("chunk A", color=C_A, font_size=20).next_to(ax.c2p(1.6, traj_fA(1.6)), UP, buff=0.12)
     bL = Text("chunk B", color=C_B, font_size=20).next_to(ax.c2p(11.4, traj_fB(method, 11.4)), RIGHT, buff=0.05)
+    bstart = Dot(ax.c2p(_B0, traj_fB(method, _B0)), color=C_B, radius=0.07)
 
     scene.play(Create(ax), FadeIn(band), FadeIn(band_t))
-    scene.play(Create(cA), FadeIn(aL))
-    scene.play(Create(cB), FadeIn(bL))
+    scene.play(Create(cA), FadeIn(cA_ghost), FadeIn(aL))
+    scene.play(Create(cB), FadeIn(bstart), FadeIn(bL))
 
     notes = {
-        "anchor": ("B is free through the prefix, meets A at the anchor, then diverges", C_WARN),
-        "target": ("B matches A across the whole prefix, then they part ways", C_FROZEN),
-        "soft": ("B is clamped at the seam, then drifts close but not equal", C_FROZEN),
+        "single-action": ("B is free through the overlap, meets A at one committed step, then diverges", C_WARN),
+        "full-prefix": ("B matches A across the whole overlap, then they part ways", C_FROZEN),
+        "soft-overlap": ("B is clamped near the seam, then drifts close but not equal", C_FROZEN),
     }
     txt, col = notes[method]
-    if method == "anchor":
-        scene.play(FadeIn(Dot(ax.c2p(P, traj_fA(P)), color=C_FROZEN, radius=0.08)))
+    if method == "single-action":
+        scene.play(FadeIn(Dot(ax.c2p(_A1, traj_fA(_A1)), color=C_FROZEN, radius=0.08)))
     scene.play(FadeIn(Text(txt, color=col, font_size=20).next_to(ax, DOWN, buff=0.1)))
     scene.wait(1.2)
