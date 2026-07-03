@@ -93,13 +93,15 @@ And the payoff is real: in simulation, training-time conditioning **outperforms*
 
 **A different route: offset the state, not the actions.** There's a parallel line of work (e.g. VLASH) that attacks the same seam from the opposite side. Instead of freezing the committed *actions*, it rolls the robot's *state* forward (where the arm will be at execution time is just its current state plus the actions already committed) and conditions the policy on that future state, leaving the (stale) camera image as-is. Crucially, the new chunk is then predicted with **no constraint on its actions at all**: the policy is free to generate whatever chunk it wants, just from the corrected starting point. Same goal, opposite lever: fix the *input* state rather than pin the *output* actions. It's another perfectly good way to do this. (The two haven't been raced head-to-head: VLASH benchmarks against the older inference-time RTC, and the training-time RTC paper only name-checks VLASH, so there's no "which wins" verdict yet.)
 
+One catch specific to this route: rolling the state forward assumes the low-level controller actually *reaches* the commanded actions. If tracking error is large, the predicted achieved pose is off, and getting it right would mean running the controller (forward dynamics) during the rollout, which adds back the very latency the method was trying to avoid.
+
 ### The three flavors, side by side
 
 | Approach | Conditions on | Applied at | How | Extra cost at deploy |
 |---|---|---|---|---|
 | **Inference-time RTC** | committed actions (the prefix) | inference only | inpainting via pseudoinverse guidance during sampling | a backward pass on every denoising step |
 | **Training-time RTC** | committed actions (the prefix) | training (simulate the delay) | fix the prefix as clean (timestep = clean), denoise the rest | none |
-| **VLASH (state roll-forward)** | the robot's rolled-forward *state*, not the actions | training augmentation, then inference | roll the state forward by the committed actions, feed that future state in, leave the output actions free | none |
+| **VLASH (state roll-forward)** | the robot's rolled-forward *state*, not the actions | training augmentation, then inference | roll the state forward by the committed actions, feed that future state in, leave the output actions free | none in compute, but assumes the controller tracks commands well (large tracking error needs the controller in the loop, adding latency) |
 
 The split: the first two condition on the *actions* (constrain the output), VLASH conditions on the *state* (correct the input). And only inference-time RTC pays a per-step cost, the other two move the work into training and are free at runtime.
 
