@@ -42,6 +42,16 @@ Content and timestep have to agree, though. Clean content wearing a noisy timest
 
 ![The per-token timestep as a noise-level input: the prefix pinned clean, the postfix noisy](assets/timestep-signal.gif)
 
+## Why does fixing the prefix smooth anything?
+
+There's a gap in that story, though. The postfix still gets denoised from noise, so what keeps it from turning out smooth on its own but out of step with the prefix? Pinning a couple of actions at the front doesn't obviously pin anything after them.
+
+It comes down to **self-attention**. The policy is a transformer over the whole action sequence, so a postfix step is already looking at the prefix when the model predicts its velocity, and those prefix tokens hold real, clean actions rather than noise. The postfix never gets figured out on its own. It's worked out with the committed actions sitting right beside it.
+
+Training is what makes that hold. Each example pairs a clean prefix with a noised postfix and grades the model only on the postfix, there's **no loss on the prefix steps** (the paper masks it out). Every gradient lands on the postfix, and what it's really tuning is the attention that reads the prefix, so the model learns to choose velocities that pick up where the committed actions leave off. That also explains why more prefix helps. One clean action gives the following steps a single point to grab; a whole committed stretch gives them a line to follow, and the seam smooths away instead of getting tacked down at one spot.
+
+![Postfix steps attend to the fixed, clean prefix; their velocities bend to continue it. No loss is computed on the prefix](assets/why-attention.gif)
+
 ## How much to condition on?
 
 How big should the prefix be? Anywhere from a light touch to a firm grip.

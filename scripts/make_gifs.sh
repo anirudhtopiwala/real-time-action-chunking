@@ -13,6 +13,7 @@ PAIRS=(
   "full_prefix:full-prefix:FullPrefix"
   "action_delay:action-delay:ActionDelay"
   "timestep_signal:timestep-signal:TimestepSignal"
+  "why_attention:why-attention:WhyAttention"
 )
 for p in "${PAIRS[@]}"; do
   IFS=: read -r stem handle cls <<< "$p"

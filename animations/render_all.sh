@@ -15,6 +15,7 @@ SCENES=(
   "full_prefix.py FullPrefix"
   "action_delay.py ActionDelay"
   "timestep_signal.py TimestepSignal"
+  "why_attention.py WhyAttention"
 )
 for s in "${SCENES[@]}"; do
   f="${s%% *}"; sc="${s##* }"
